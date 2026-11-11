@@ -6145,18 +6145,9 @@ class RoomClient {
     }
 
     genGravatar(email, size = false) {
-        const hash = md5(email.toLowerCase().trim());
-        const avatarSize = size || 250;
-        const gravatarURL = `https://www.gravatar.com/avatar/${hash}?s=${avatarSize}&d=404`;
-        // d=404: no Gravatar for this email -> the image errors and is swapped to the initials avatar
-        if (!gravatarFallbacks.has(gravatarURL)) {
-            installGravatarFallback();
-            gravatarFallbacks.set(gravatarURL, this.genAvatarSvg(email, avatarSize));
-        }
-        return gravatarURL;
-        function md5(input) {
-            return CryptoJS.MD5(input).toString();
-        }
+        // adm/hetzner#39: kein Abruf bei gravatar.com, der MD5 der Mailadresse
+        // ginge an einen Dritten. Immer das lokal erzeugte Initialen-Avatar.
+        return this.genAvatarSvg(email, size || 250);
     }
 
     isValidEmail(email) {

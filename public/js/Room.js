@@ -3012,32 +3012,8 @@ async function updateMyPeerAvatarByUrl() {
                 localGrid.appendChild(makeAvatarImg(url));
             }
 
-            // DiceBear random avatars
-            const randomAvatarLabel = document.createElement('p');
-            randomAvatarLabel.textContent = 'Or pick a random avatar:';
-            randomAvatarLabel.style.cssText = 'color:#aaa;font-size:12px;margin:10px 0 6px;text-align:center;';
-
-            const randomAvatarGrid = document.createElement('div');
-            randomAvatarGrid.style.cssText =
-                'display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:4px;';
-            const dicebearStyles = [
-                'bottts-neutral',
-                'adventurer-neutral',
-                'thumbs',
-                'initials',
-                'identicon',
-                'shapes',
-            ];
-
-            for (let i = 0; i < 6; i++) {
-                const seed = Math.random().toString(36).substring(2, 10);
-                const style = dicebearStyles[i % dicebearStyles.length];
-                const url = `https://api.dicebear.com/9.x/${style}/svg?seed=${encodeURIComponent(seed)}`;
-                randomAvatarGrid.appendChild(makeAvatarImg(url));
-            }
-
             let insertAfter = input;
-            for (const el of [localLabel, localGrid, randomAvatarLabel, randomAvatarGrid]) {
+            for (const el of [localLabel, localGrid]) {
                 insertAfter.parentNode.insertBefore(el, insertAfter.nextSibling);
                 insertAfter = el;
             }
