@@ -7,6 +7,19 @@
 # so we ship a fixed static build instead of installing ffmpeg from apt.
 FROM mwader/static-ffmpeg:9.0.2 AS ffmpeg
 
+# adm/hetzner#39: Bibliotheken und Schriften aus dem eigenen Image statt von
+# CDNs. apply.js kopiert sie nach public/vendor/, ersetzt die URLs und bricht
+# ab, wenn eine fremde URL übrig bleibt (vendor/assets.tsv, vendor/allow.tsv).
+FROM node:24-slim AS vendor
+WORKDIR /vendor
+COPY vendor/package.json vendor/package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --ignore-scripts --no-audit --no-fund
+COPY vendor/apply.js vendor/assets.tsv vendor/allow.tsv ./
+COPY vendor/fonts ./fonts
+COPY public /public
+RUN node apply.js /vendor /public
+
 # Use Node.js 24 LTS slim image as base
 FROM node:24-slim
 
@@ -37,7 +50,7 @@ RUN --mount=type=cache,target=/root/.npm \
 # Avoid recursive chown, which duplicates /src into a costly overlayfs layer.
 # Dependencies remain root-owned and readable; application files are owned by node.
 COPY --chown=node:node app ./app
-COPY --chown=node:node public ./public
+COPY --chown=node:node --from=vendor /public ./public
 
 # Copy config template → config
 COPY --chown=node:node app/src/config.template.js app/src/config.js

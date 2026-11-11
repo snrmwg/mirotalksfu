@@ -1,0 +1,12 @@
+# Fundstellen fremder Hosts, die bewusst stehen bleiben (adm/hetzner#39).
+# Spalten, getrennt durch einen Tabulator:
+#   Datei relativ zu public/, Anfang der URL an der Fundstelle, Grund.
+# apply.js meldet eine Ausnahme ohne Fundstelle; dann hier streichen.
+
+views/Room.html	https://cdn.jsdelivr.net -->	HTML-Kommentar, lädt nichts
+js/RoomClient.js	https://esm.sh/@anam-ai/js-sdk@latest	Video-KI Anam, nur mit VIDEOAI_ANAM_API_KEY; in nbg1 nicht gesetzt
+video-effects/face-tracker.js	https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MEDIAPIPE_VERSION}/	Video-Effekte, nbg1 setzt SHOW_VIDEO_EFFECTS=false
+video-effects/face-tracker.js	https://storage.googleapis.com/mediapipe-models/	Video-Effekte, nbg1 setzt SHOW_VIDEO_EFFECTS=false
+video-effects/model-renderer.js	https://cdn.jsdelivr.net/npm/three@${THREE_VERSION}	Video-Effekte, nbg1 setzt SHOW_VIDEO_EFFECTS=false
+vendor/emoji-mart/dist/browser.js	https://cdn.jsdelivr.net/npm/emoji-datasource-	Bilder nur für die Sets apple, google usw.; MiroTalk nutzt das Standard-Set native
+vendor/jspdf/dist/jspdf.umd.min.js	https://cdnjs.cloudflare.com/ajax/libs/pdfobject/	nur für output('pdfobjectnewwindow'), MiroTalk ruft output() nicht auf
